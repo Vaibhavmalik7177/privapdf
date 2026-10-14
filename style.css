@@ -1,26 +1,21 @@
-/* Custom CSS styling for PrivaPDF */
-
-/* Active state when dragging files over the dropzone */
 .drag-over {
   border-color: #6366f1 !important;
   background-color: rgba(99, 102, 241, 0.1) !important;
 }
 
-/* Custom subtle scrollbar styling for page thumbnail grid */
-#pages-grid::-webkit-scrollbar {
+#grid-merge::-webkit-scrollbar,
+#grid-convert::-webkit-scrollbar {
   width: 6px;
 }
 
-#pages-grid::-webkit-scrollbar-track {
+#grid-merge::-webkit-scrollbar-track,
+#grid-convert::-webkit-scrollbar-track {
   background: rgba(15, 23, 42, 0.6);
   border-radius: 8px;
 }
 
-#pages-grid::-webkit-scrollbar-thumb {
+#grid-merge::-webkit-scrollbar-thumb,
+#grid-convert::-webkit-scrollbar-thumb {
   background: rgba(51, 65, 85, 0.8);
   border-radius: 8px;
-}
-
-#pages-grid::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.6);
 }

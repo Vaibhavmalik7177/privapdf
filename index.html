@@ -11,7 +11,7 @@
   <!-- PDF Processing Engine (pdf-lib) -->
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
-  <!-- PDF Renderer for Page Thumbnails (PDF.js) -->
+  <!-- PDF Renderer (PDF.js) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
   <!-- Custom CSS File -->
@@ -24,59 +24,95 @@
     <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <span class="text-2xl font-black tracking-wider text-indigo-400">Priva<span class="text-white">PDF</span></span>
-        <span class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full font-mono">v1.0 MVP</span>
+        <span class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full font-mono">v1.2</span>
       </div>
-      <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+      <div class="hidden sm:flex items-center space-x-2 text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
         <span>100% In-Browser &bull; Zero Server Uploads</span>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-1 max-w-4xl w-full mx-auto px-6 py-10 flex flex-col">
-
-    <!-- Hero / Intro -->
-    <div class="text-center mb-8">
-      <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-3">
-        Merge & Rearrange PDFs <span class="text-indigo-400">Privately</span>
-      </h1>
-      <p class="text-slate-400 max-w-xl mx-auto text-sm md:text-base">
-        Your sensitive files never leave your device. All document parsing, merging, and page manipulation happens strictly in your browser memory.
-      </p>
-    </div>
-
-    <!-- Drop Zone -->
-    <div id="drop-zone" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-2xl p-8 text-center bg-slate-900/40 cursor-pointer transition-all duration-200 mb-6 group">
-      <input type="file" id="file-input" multiple accept="application/pdf" class="hidden" />
-      <label for="file-input" class="cursor-pointer flex flex-col items-center">
-        <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-          <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-          </svg>
-        </div>
-        <span class="text-base font-semibold text-slate-200">Click to upload or drag & drop PDFs</span>
-        <span class="text-xs text-slate-500 mt-1">Select one or multiple PDF documents</span>
-      </label>
-    </div>
-
-    <!-- Page Grid Section -->
-    <div id="workspace" class="hidden flex-1 flex flex-col mb-8">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Document Pages (<span id="total-pages">0</span>)</h2>
-        <button id="clear-all-btn" class="text-xs text-rose-400 hover:text-rose-300 font-medium">Clear All</button>
-      </div>
-
-      <!-- Thumbnails Container -->
-      <div id="pages-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4 bg-slate-900/60 rounded-xl border border-slate-800 min-h-[220px] max-h-[480px] overflow-y-auto"></div>
-    </div>
-
-    <!-- Merge Action Bar -->
-    <div class="mt-auto">
-      <button id="export-btn" disabled class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 px-6 rounded-xl shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center justify-center space-x-2">
-        <span id="export-text">Export Merged PDF</span>
+  <!-- Navigation Switcher Bar -->
+  <nav class="border-b border-slate-800 bg-slate-900/30">
+    <div class="max-w-4xl mx-auto px-6 flex space-x-6">
+      <button id="nav-merge" onclick="switchTab('merge')" class="py-3 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-400 transition">
+        📄 Merge & Rearrange PDFs
+      </button>
+      <button id="nav-convert" onclick="switchTab('convert')" class="py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
+        🖼️ PDF to Images (PNG/JPG)
       </button>
     </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-6 py-8 flex flex-col">
+
+    <!-- ================= VIEW 1: MERGE & ARRANGE ================= -->
+    <section id="view-merge" class="flex-1 flex flex-col">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight mb-2">Merge & Rearrange PDFs Privately</h1>
+        <p class="text-slate-400 text-sm">Combine multiple files or delete unwanted pages securely in your browser.</p>
+      </div>
+
+      <!-- Drop Zone -->
+      <div id="drop-zone-merge" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-2xl p-6 text-center bg-slate-900/40 cursor-pointer transition mb-6 group">
+        <input type="file" id="file-input-merge" multiple accept="application/pdf" class="hidden" />
+        <label for="file-input-merge" class="cursor-pointer flex flex-col items-center">
+          <span class="text-sm font-semibold text-slate-200">Click to upload or drag & drop PDFs to Merge</span>
+          <span class="text-xs text-slate-500 mt-1">Select multiple PDF documents</span>
+        </label>
+      </div>
+
+      <!-- Workspace -->
+      <div id="workspace-merge" class="hidden flex-1 flex flex-col mb-6">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Pages to Merge (<span id="total-pages-merge">0</span>)</h2>
+          <button onclick="clearMergeWorkspace()" class="text-xs text-rose-400 hover:text-rose-300">Clear All</button>
+        </div>
+        <div id="grid-merge" class="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-900/60 rounded-xl border border-slate-800 max-h-[360px] overflow-y-auto"></div>
+      </div>
+
+      <button id="export-merge-btn" disabled class="mt-auto w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-6 rounded-xl shadow transition disabled:opacity-40 disabled:cursor-not-allowed">
+        <span id="export-merge-text">Export Merged PDF</span>
+      </button>
+    </section>
+
+    <!-- ================= VIEW 2: PDF TO IMAGES ================= -->
+    <section id="view-convert" class="hidden flex-1 flex flex-col">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight mb-2">Convert PDF Pages to Images</h1>
+        <p class="text-slate-400 text-sm">Extract every page into high-resolution PNG or JPEG files instantly.</p>
+      </div>
+
+      <!-- Drop Zone -->
+      <div id="drop-zone-convert" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-2xl p-6 text-center bg-slate-900/40 cursor-pointer transition mb-6 group">
+        <input type="file" id="file-input-convert" accept="application/pdf" class="hidden" />
+        <label for="file-input-convert" class="cursor-pointer flex flex-col items-center">
+          <span class="text-sm font-semibold text-slate-200">Click to upload or drag & drop a PDF to Convert</span>
+          <span class="text-xs text-slate-500 mt-1">Select a single PDF document</span>
+        </label>
+      </div>
+
+      <!-- Format Selector & Workspace -->
+      <div id="workspace-convert" class="hidden flex-1 flex flex-col mb-6">
+        <div class="flex justify-between items-center mb-3">
+          <div class="flex items-center space-x-3">
+            <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Extracted Pages (<span id="total-pages-convert">0</span>)</h2>
+            <select id="image-format" class="bg-slate-800 text-xs border border-slate-700 rounded px-2 py-1 text-slate-200">
+              <option value="image/png">Format: PNG (High Quality)</option>
+              <option value="image/jpeg">Format: JPEG (Smaller Size)</option>
+            </select>
+          </div>
+          <button onclick="clearConvertWorkspace()" class="text-xs text-rose-400 hover:text-rose-300">Clear All</button>
+        </div>
+        <div id="grid-convert" class="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-900/60 rounded-xl border border-slate-800 max-h-[360px] overflow-y-auto"></div>
+      </div>
+
+      <button id="export-convert-btn" disabled class="mt-auto w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-xl shadow transition disabled:opacity-40 disabled:cursor-not-allowed">
+        <span id="export-convert-text">Download All Pages as Images</span>
+      </button>
+    </section>
 
   </main>
 
