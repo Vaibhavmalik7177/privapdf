@@ -34,13 +34,16 @@
   </header>
 
   <!-- Navigation Switcher Bar -->
-  <nav class="border-b border-slate-800 bg-slate-900/30">
-    <div class="max-w-4xl mx-auto px-6 flex space-x-6">
+  <nav class="border-b border-slate-800 bg-slate-900/30 overflow-x-auto">
+    <div class="max-w-4xl mx-auto px-6 flex space-x-6 min-w-max">
       <button id="nav-merge" onclick="switchTab('merge')" class="py-3 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-400 transition">
-        📄 Merge & Rearrange PDFs
+        📄 Merge & Rearrange
       </button>
       <button id="nav-convert" onclick="switchTab('convert')" class="py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
-        🖼️ PDF to Images (PNG/JPG)
+        🖼️ PDF to Images
+      </button>
+      <button id="nav-img2pdf" onclick="switchTab('img2pdf')" class="py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
+        📑 Images to PDF
       </button>
     </div>
   </nav>
@@ -55,7 +58,6 @@
         <p class="text-slate-400 text-sm">Combine multiple files or delete unwanted pages securely in your browser.</p>
       </div>
 
-      <!-- Drop Zone -->
       <div id="drop-zone-merge" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-2xl p-6 text-center bg-slate-900/40 cursor-pointer transition mb-6 group">
         <input type="file" id="file-input-merge" multiple accept="application/pdf" class="hidden" />
         <label for="file-input-merge" class="cursor-pointer flex flex-col items-center">
@@ -64,7 +66,6 @@
         </label>
       </div>
 
-      <!-- Workspace -->
       <div id="workspace-merge" class="hidden flex-1 flex flex-col mb-6">
         <div class="flex justify-between items-center mb-3">
           <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Pages to Merge (<span id="total-pages-merge">0</span>)</h2>
@@ -85,7 +86,6 @@
         <p class="text-slate-400 text-sm">Extract every page into high-resolution PNG or JPEG files instantly.</p>
       </div>
 
-      <!-- Drop Zone -->
       <div id="drop-zone-convert" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-2xl p-6 text-center bg-slate-900/40 cursor-pointer transition mb-6 group">
         <input type="file" id="file-input-convert" accept="application/pdf" class="hidden" />
         <label for="file-input-convert" class="cursor-pointer flex flex-col items-center">
@@ -94,7 +94,6 @@
         </label>
       </div>
 
-      <!-- Format Selector & Workspace -->
       <div id="workspace-convert" class="hidden flex-1 flex flex-col mb-6">
         <div class="flex justify-between items-center mb-3">
           <div class="flex items-center space-x-3">
@@ -111,6 +110,34 @@
 
       <button id="export-convert-btn" disabled class="mt-auto w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-xl shadow transition disabled:opacity-40 disabled:cursor-not-allowed">
         <span id="export-convert-text">Download All Pages as Images</span>
+      </button>
+    </section>
+
+    <!-- ================= VIEW 3: IMAGES TO PDF ================= -->
+    <section id="view-img2pdf" class="hidden flex-1 flex flex-col">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight mb-2">Convert Images to PDF</h1>
+        <p class="text-slate-400 text-sm">Upload multiple JPG or PNG images and bundle them into a single clean PDF.</p>
+      </div>
+
+      <div id="drop-zone-img2pdf" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-2xl p-6 text-center bg-slate-900/40 cursor-pointer transition mb-6 group">
+        <input type="file" id="file-input-img2pdf" multiple accept="image/png, image/jpeg, image/jpg" class="hidden" />
+        <label for="file-input-img2pdf" class="cursor-pointer flex flex-col items-center">
+          <span class="text-sm font-semibold text-slate-200">Click to upload or drag & drop Images</span>
+          <span class="text-xs text-slate-500 mt-1">Supports PNG, JPG, JPEG</span>
+        </label>
+      </div>
+
+      <div id="workspace-img2pdf" class="hidden flex-1 flex flex-col mb-6">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Selected Images (<span id="total-images-img2pdf">0</span>)</h2>
+          <button onclick="clearImg2PdfWorkspace()" class="text-xs text-rose-400 hover:text-rose-300">Clear All</button>
+        </div>
+        <div id="grid-img2pdf" class="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-900/60 rounded-xl border border-slate-800 max-h-[360px] overflow-y-auto"></div>
+      </div>
+
+      <button id="export-img2pdf-btn" disabled class="mt-auto w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-6 rounded-xl shadow transition disabled:opacity-40 disabled:cursor-not-allowed">
+        <span id="export-img2pdf-text">Generate PDF from Images</span>
       </button>
     </section>
 
